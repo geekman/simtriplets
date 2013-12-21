@@ -1,0 +1,9 @@
+
+python simtriplets {
+	mod_instantiate = simtriplets
+	func_instantiate = instantiate
+
+	mod_authorize = simtriplets
+	func_authorize = authorize
+}
+

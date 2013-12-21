@@ -1,0 +1,65 @@
+simtriplets
+============
+A FreeRADIUS python module that reads the simtriplets database.  It is intended
+to replace the ``rlm_sim_files`` native module, which reads in the simtriplets
+file and responds to authorization requests.
+
+The main difference is that the native module only reads in 3 triplet records
+for a given IMSI, whereas simtriplets.py reads in the entire "database" at the
+start and randomly selects 3 for every authorization.
+
+
+FreeRADIUS Configuration
+--------------------------
+You will need to add the following module file ``modules/simtriplets`` into the
+configuration directory (usually ``/etc/raddb/``. It just tells FreeRADIUS
+which Python module and functions to use.
+
+Unfortunately, FreeRADIUS python modules cannot accept configuration
+parameters, so the path to the ``simtriplets`` file is hardcoded into the
+module itself.  You will need to instantiate the ``simtriplets`` module in the
+``authorize`` section like so:
+
+    authorize {
+        ...
+
+        simtriplets
+    }
+
+If you need to debug the module, run ``radius -X`` for full debugging output.
+The module emits very little INFO messages during normal operation - just
+enough to verify that it is working correctly.
+
+Note that if you get a permission error, check that the simtriplets file can
+be opened by FreeRADIUS, and if SELinux is enabled, make sure the file context 
+is correct. You can use ``ls -Z`` to show the SELinux contexts.
+
+
+simtriplets File Format
+------------------------
+The file should contain one record per line, separated by commas. The fields
+should be (in the following order): IMSI, RAND, SRES and Kc.
+
+Note that the IMSI need not be prefixed as this module only supports EAP-SIM
+authentication.
+
+
+License
+--------
+Copyright (C) 2013 Darell Tan
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+USA.
+
