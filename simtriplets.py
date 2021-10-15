@@ -44,7 +44,7 @@ def instantiate(p):
 		line = line.strip()
 		if not line or line.startswith('#'):
 			continue
-		imsi, rand, sres, kc = line.split(',')
+		imsi, rand, sres, kc = map(lambda x: x.strip(), line.split(','))
 		record = ('0x' + rand, '0x' + sres, '0x' + kc)
 		if imsi in simtriplets:
 			simtriplets[imsi].append(record)
