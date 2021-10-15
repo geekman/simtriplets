@@ -39,7 +39,7 @@ def log(level, msg):
 def instantiate(p):
 	log(radiusd.L_INFO, 'instantiated simtriplets.py')
 
-	f = open(SIMTRIPLETS, 'rb')
+	f = open(SIMTRIPLETS, 'r')
 	for line in f:
 		line = line.strip()
 		if not line or line.startswith('#'):
@@ -83,7 +83,7 @@ def authorize(data):
 	triplets = random.sample(user_triplets, 3)
 	log(radiusd.L_DBG, 'selected RAND values: ' + ', '.join(t[0] for t in triplets))
 	reply = []
-	for i in xrange(3):
+	for i in range(3):
 		reply.extend( zip([k + str(i + 1) for k in tuple_labels], triplets[i]) )
 
 	return (radiusd.RLM_MODULE_UPDATED, 
